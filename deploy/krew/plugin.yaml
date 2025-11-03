@@ -3,14 +3,14 @@ kind: Plugin
 metadata:
   name: triage
 spec:
-  version: "v0.1.0"
+  version: "v0.1.1"
   platforms:
   - selector:
       matchLabels:
         os: linux
         arch: amd64
-    uri: https://github.com/Lc-Lin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_linux_amd64.tar.gz
-    sha256: "564f7a669a0055c37c1571f38cff6be631158fc06ee3902c36c52bf0739d19e6"
+    uri: https://github.com/Lc-Lin/kubectl-triage/releases/download/v0.1.1/kubectl-triage_linux_amd64.tar.gz
+    sha256: "d212e7202a4db0df9fe611057067fe8388412f2efb271ae2bd185e24c1fa665b"
     files:
     - from: "./kubectl-triage"
       to: "."
@@ -21,8 +21,8 @@ spec:
       matchLabels:
         os: darwin
         arch: amd64
-    uri: https://github.com/Lc-Lin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_darwin_amd64.tar.gz
-    sha256: "83fdcfe2f445ed6a5383add8ab8b5f2daeee2607b26828e335f99419a750a65e"
+    uri: https://github.com/Lc-Lin/kubectl-triage/releases/download/v0.1.1/kubectl-triage_darwin_amd64.tar.gz
+    sha256: "baabb936ec8051cd06910c3fa1678d4f8641cc717397e120b0f765023d548b9f"
     files:
     - from: "./kubectl-triage"
       to: "."
@@ -33,8 +33,8 @@ spec:
       matchLabels:
         os: windows
         arch: amd64
-    uri: https://github.com/Lc-Lin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_windows_amd64.zip
-    sha256: "b5120c2a7fae43a2e76845a0b32b62a90ca2b949df590b564f664bc48e34fcf7"
+    uri: https://github.com/Lc-Lin/kubectl-triage/releases/download/v0.1.1/kubectl-triage_windows_amd64.zip
+    sha256: "112553a86b6398337ba27b41397f75a5d5cd1dde7961b6b18ea472a3938484e7"
     files:
     - from: "/kubectl-triage.exe"
       to: "."
