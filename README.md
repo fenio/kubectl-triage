@@ -1,5 +1,10 @@
 # kubectl-triage
 
+[![Release](https://img.shields.io/github/v/release/Lc-Lin/kubectl-triage)](https://github.com/Lc-Lin/kubectl-triage/releases)
+[![Test](https://github.com/Lc-Lin/kubectl-triage/workflows/test/badge.svg)](https://github.com/Lc-Lin/kubectl-triage/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Lc-Lin/kubectl-triage)](https://goreportcard.com/report/github.com/Lc-Lin/kubectl-triage)
+[![License](https://img.shields.io/github/license/Lc-Lin/kubectl-triage)](LICENSE)
+
 > The 5-Second Diagnostic Snapshot for Failed Kubernetes Pods
 
 `kubectl-triage` is a kubectl plugin that instantly diagnoses failing pods by intelligently aggregating the three critical pieces of information you always need — all in one command, all in 5 seconds.
@@ -48,13 +53,27 @@ kubectl krew install triage
 
 ### Manual Installation
 
-Download the latest release for your platform from the [releases page](https://github.com/lichenglin/kubectl-triage/releases).
+Download the latest release for your platform from the [releases page](https://github.com/Lc-Lin/kubectl-triage/releases).
 
-Extract and move the binary to your PATH:
-
+**Linux / macOS:**
 ```bash
-tar -xzf kubectl-triage_<platform>_<arch>.tar.gz
-mv kubectl-triage /usr/local/bin/
+# Download (replace VERSION with actual version, e.g., v0.1.0)
+VERSION=v0.1.0
+OS=$(uname -s | tr '[:upper:]' '[:lower:]')  # linux or darwin
+ARCH=amd64
+
+curl -LO "https://github.com/Lc-Lin/kubectl-triage/releases/download/${VERSION}/kubectl-triage_${OS}_${ARCH}.tar.gz"
+
+# Extract and install
+tar -xzf kubectl-triage_${OS}_${ARCH}.tar.gz
+sudo mv kubectl-triage /usr/local/bin/
+chmod +x /usr/local/bin/kubectl-triage
+```
+
+**Windows:**
+```powershell
+# Download from releases page and extract kubectl-triage.exe
+# Add to your PATH
 ```
 
 Verify installation:
