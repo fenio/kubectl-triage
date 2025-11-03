@@ -1,0 +1,226 @@
+---
+# Namespace for testing
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: triage-test
+
+---
+# 1. Healthy Pod - nginx (Running, no restarts)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: healthy-nginx
+  namespace: triage-test
+  labels:
+    app: test
+    type: healthy
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.27-alpine
+    ports:
+    - containerPort: 80
+    resources:
+      requests:
+        memory: "32Mi"
+        cpu: "50m"
+      limits:
+        memory: "64Mi"
+        cpu: "100m"
+
+---
+# 2. CrashLoopBackOff Pod - invalid command
+apiVersion: v1
+kind: Pod
+metadata:
+  name: crashloop-pod
+  namespace: triage-test
+  labels:
+    app: test
+    type: crashloop
+spec:
+  containers:
+  - name: app
+    image: busybox:1.37
+    command: ["/bin/sh", "-c"]
+    args:
+    - |
+      echo "Starting application..."
+      echo "Connecting to database..."
+      echo "ERROR: database connection failed"
+      exit 1
+    resources:
+      requests:
+        memory: "16Mi"
+        cpu: "50m"
+      limits:
+        memory: "32Mi"
+        cpu: "100m"
+
+---
+# 3. ImagePullBackOff Pod - non-existent image
+apiVersion: v1
+kind: Pod
+metadata:
+  name: imagepull-error
+  namespace: triage-test
+  labels:
+    app: test
+    type: imagepull
+spec:
+  containers:
+  - name: app
+    image: nonexistent-registry.io/fake-image:v1.0.0
+    resources:
+      requests:
+        memory: "16Mi"
+        cpu: "50m"
+
+---
+# 4. OOMKilled Pod - will be killed by OOM
+apiVersion: v1
+kind: Pod
+metadata:
+  name: oom-pod
+  namespace: triage-test
+  labels:
+    app: test
+    type: oom
+spec:
+  containers:
+  - name: memory-hog
+    image: busybox:1.37
+    command: ["/bin/sh", "-c"]
+    args:
+    - |
+      echo "Allocating memory..."
+      # Try to allocate more memory than the limit
+      for i in $(seq 1 10); do
+        dd if=/dev/zero of=/tmp/test$i bs=10M count=1
+        echo "Allocated 10MB (attempt $i)"
+        sleep 1
+      done
+      echo "Done"
+      sleep 3600
+    resources:
+      requests:
+        memory: "16Mi"
+        cpu: "50m"
+      limits:
+        memory: "32Mi"  # Will OOM when trying to allocate 100MB
+        cpu: "100m"
+
+---
+# 5. Multi-container Pod - one failed, one healthy
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-container-pod
+  namespace: triage-test
+  labels:
+    app: test
+    type: multi
+spec:
+  containers:
+  - name: app
+    image: busybox:1.37
+    command: ["/bin/sh", "-c"]
+    args:
+    - |
+      echo "App container starting..."
+      echo "Config file not found: /etc/config/app.yaml"
+      echo "ERROR: failed to initialize application"
+      exit 1
+    resources:
+      requests:
+        memory: "16Mi"
+        cpu: "50m"
+      limits:
+        memory: "32Mi"
+        cpu: "100m"
+  - name: sidecar
+    image: nginx:1.27-alpine
+    ports:
+    - containerPort: 80
+    resources:
+      requests:
+        memory: "32Mi"
+        cpu: "50m"
+      limits:
+        memory: "64Mi"
+        cpu: "100m"
+
+---
+# 6. Liveness Probe Failed Pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-failed
+  namespace: triage-test
+  labels:
+    app: test
+    type: liveness
+spec:
+  containers:
+  - name: app
+    image: busybox:1.37
+    command: ["/bin/sh", "-c"]
+    args:
+    - |
+      echo "Starting app..."
+      touch /tmp/healthy
+      sleep 10
+      echo "Simulating failure - removing health file"
+      rm /tmp/healthy
+      sleep 3600
+    livenessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      failureThreshold: 2
+    resources:
+      requests:
+        memory: "16Mi"
+        cpu: "50m"
+      limits:
+        memory: "32Mi"
+        cpu: "100m"
+
+---
+# 7. Healthy multi-container Pod (for testing --all-containers flag)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: healthy-multi
+  namespace: triage-test
+  labels:
+    app: test
+    type: healthy-multi
+spec:
+  containers:
+  - name: app
+    image: nginx:1.27-alpine
+    ports:
+    - containerPort: 80
+    resources:
+      requests:
+        memory: "32Mi"
+        cpu: "50m"
+      limits:
+        memory: "64Mi"
+        cpu: "100m"
+  - name: sidecar
+    image: busybox:1.37
+    command: ["/bin/sh", "-c"]
+    args: ["while true; do echo 'Sidecar running'; sleep 30; done"]
+    resources:
+      requests:
+        memory: "16Mi"
+        cpu: "50m"
+      limits:
+        memory: "32Mi"
+        cpu: "100m"
