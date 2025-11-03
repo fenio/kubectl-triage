@@ -41,16 +41,27 @@ spec:
     - from: LICENSE
       to: "."
     bin: "kubectl-triage.exe"
-  shortDescription: Fast triage for failed Kubernetes pods
+  shortDescription: Fast diagnostic snapshots for failed Kubernetes pods
   homepage: https://github.com/Lc-Lin/kubectl-triage
   caveats: |
     Usage:
-      $ kubectl triage <pod-name>
+      kubectl triage <pod-name>
 
-    For additional options:
-      $ kubectl triage --help
-      or https://github.com/Lc-Lin/kubectl-triage/blob/v0.1.0/doc/USAGE.md
-
+    See kubectl triage --help for more information.
   description: |
-    kubectl-triage provides a 5-second diagnostic snapshot for failed Kubernetes pods.
-    It intelligently aggregates pod status, critical events, and container logs into a single view.
+    kubectl-triage provides 5-second diagnostic snapshots for failed Kubernetes pods.
+
+    It intelligently aggregates the critical information you need:
+    - Pod status and container states
+    - Critical events (Warning/Error only, filtering out noise)
+    - Previous crash logs (if container restarted)
+    - Current container logs
+
+    Only failed/restarted containers are shown by default, keeping output focused.
+
+    Key features:
+    - Smart health detection (catches "flapping" pods)
+    - Intelligent container filtering (RestartCount > 0)
+    - Signal-over-noise event filtering
+    - Parallel log collection for speed
+    - Beautiful color-coded output
