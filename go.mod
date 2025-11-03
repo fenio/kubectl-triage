@@ -1,4 +1,4 @@
-module github.com/lichenglin/kubectl-triage
+module github.com/Lc-Lin/kubectl-triage
 
 go 1.16
 

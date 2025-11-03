@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/lichenglin/kubectl-triage/cmd/plugin/cli"
+	"github.com/Lc-Lin/kubectl-triage/cmd/plugin/cli"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp" // required for GKE
 )
 

@@ -31,13 +31,13 @@ git push origin v0.1.0
 
 ### Step 2: Verify GitHub Actions
 
-1. Go to: `https://github.com/lichenglin/kubectl-triage/actions`
+1. Go to: `https://github.com/Lc-Lin/kubectl-triage/actions`
 2. Watch the release workflow complete (~5-10 minutes)
 3. Check for any errors
 
 ### Step 3: Verify Release
 
-1. Go to: `https://github.com/lichenglin/kubectl-triage/releases`
+1. Go to: `https://github.com/Lc-Lin/kubectl-triage/releases`
 2. Verify v0.1.0 release is created
 3. Download and test binaries for your platform
 
@@ -83,9 +83,9 @@ After GitHub release is published, download the binaries and calculate SHA256:
 
 ```bash
 # Download release artifacts
-curl -LO https://github.com/lichenglin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_linux_amd64.tar.gz
-curl -LO https://github.com/lichenglin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_darwin_amd64.tar.gz
-curl -LO https://github.com/lichenglin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_windows_amd64.zip
+curl -LO https://github.com/Lc-Lin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_linux_amd64.tar.gz
+curl -LO https://github.com/Lc-Lin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_darwin_amd64.tar.gz
+curl -LO https://github.com/Lc-Lin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_windows_amd64.zip
 
 # Calculate SHA256
 sha256sum kubectl-triage_linux_amd64.tar.gz
@@ -127,7 +127,7 @@ It provides a 5-second diagnostic snapshot by intelligently aggregating:
 
 Only failed/restarted containers are shown by default, keeping output focused.
 
-GitHub: https://github.com/lichenglin/kubectl-triage
+GitHub: https://github.com/Lc-Lin/kubectl-triage
 "
 
 # Push to your fork
@@ -175,7 +175,7 @@ kubectl triage <pod-name>
 
 ```bash
 # Download the binary
-curl -LO https://github.com/lichenglin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_$(uname -s)_amd64.tar.gz
+curl -LO https://github.com/Lc-Lin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_$(uname -s)_amd64.tar.gz
 
 # Extract
 tar -xzf kubectl-triage_$(uname -s)_amd64.tar.gz
@@ -191,7 +191,7 @@ kubectl triage --help
 
 ```powershell
 # Download
-Invoke-WebRequest -Uri "https://github.com/lichenglin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_windows_amd64.zip" -OutFile "kubectl-triage.zip"
+Invoke-WebRequest -Uri "https://github.com/Lc-Lin/kubectl-triage/releases/download/v0.1.0/kubectl-triage_windows_amd64.zip" -OutFile "kubectl-triage.zip"
 
 # Extract
 Expand-Archive kubectl-triage.zip -DestinationPath .
@@ -380,7 +380,7 @@ kubectl triage <pod-name> --lines=100
 
 ### Full Documentation
 
-See [README.md](https://github.com/lichenglin/kubectl-triage/blob/main/README.md) for complete documentation.
+See [README.md](https://github.com/Lc-Lin/kubectl-triage/blob/main/README.md) for complete documentation.
 
 ### Checksums
 

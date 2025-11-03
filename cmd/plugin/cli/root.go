@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/lichenglin/kubectl-triage/pkg/plugin"
+	"github.com/Lc-Lin/kubectl-triage/pkg/plugin"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"k8s.io/cli-runtime/pkg/genericclioptions"

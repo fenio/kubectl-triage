@@ -249,7 +249,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ```bash
 # Clone the repo
-git clone https://github.com/lichenglin/kubectl-triage.git
+git clone https://github.com/Lc-Lin/kubectl-triage.git
 cd kubectl-triage
 
 # Build
@@ -272,7 +272,7 @@ make test
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+Apache License 2.0 - see [LICENSE](LICENSE) file for details.
 
 ## Credits
 

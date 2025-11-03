@@ -98,7 +98,7 @@ git push origin feature/your-feature-name
 ```
 
 3. **Create a Pull Request**
-   - Go to https://github.com/lichenglin/kubectl-triage
+   - Go to https://github.com/Lc-Lin/kubectl-triage
    - Click "New Pull Request"
    - Select your fork and branch
    - Fill in the PR template with:

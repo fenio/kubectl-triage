@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/lichenglin/kubectl-triage/pkg/logger"
+	"github.com/Lc-Lin/kubectl-triage/pkg/logger"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/cli-runtime/pkg/genericclioptions"

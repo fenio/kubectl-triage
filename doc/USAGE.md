@@ -10,7 +10,7 @@ kubectl krew install triage
 
 ### Manual Installation
 
-Download the binary for your platform from the [releases page](https://github.com/lichenglin/kubectl-triage/releases) and place it in your PATH.
+Download the binary for your platform from the [releases page](https://github.com/Lc-Lin/kubectl-triage/releases) and place it in your PATH.
 
 ## Basic Usage
 
@@ -414,10 +414,10 @@ Error: failed to get pod my-pod: pods "my-pod" is forbidden: User "john" cannot 
 
 ## Further Reading
 
-- [kubectl-triage README](https://github.com/lichenglin/kubectl-triage)
+- [kubectl-triage README](https://github.com/Lc-Lin/kubectl-triage)
 - [Kubernetes Debugging Pods](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application/)
 - [Understanding Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
 
 ---
 
-**Need help?** File an issue on [GitHub](https://github.com/lichenglin/kubectl-triage/issues).
+**Need help?** File an issue on [GitHub](https://github.com/Lc-Lin/kubectl-triage/issues).
