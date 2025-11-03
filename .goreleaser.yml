@@ -1,7 +1,7 @@
 project_name: kubectl-triage
 release:
   github:
-    owner: lichenglin
+    owner: Lc-Lin
     name: kubectl-triage
 builds:
   - id: kubectl-triage
