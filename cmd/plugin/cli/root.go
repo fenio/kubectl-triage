@@ -5,13 +5,10 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
 
-	"github.com/{{ .Owner }}/{{ .Repo }}/pkg/logger"
-	"github.com/{{ .Owner }}/{{ .Repo }}/pkg/plugin"
+	"github.com/lichenglin/kubectl-triage/pkg/plugin"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/tj/go-spin"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 )
 
@@ -20,49 +17,69 @@ var (
 )
 
 func RootCmd() *cobra.Command {
+	var (
+		lines         int64
+		allContainers bool
+		force         bool
+		noColor       bool
+	)
+
 	cmd := &cobra.Command{
-		Use:           "{{ .PluginName }}",
-		Short:         "",
-		Long:          `.`,
+		Use:   "kubectl-triage <pod-name>",
+		Short: "Fast triage for failed Kubernetes pods",
+		Long: `kubectl-triage provides a 5-second diagnostic snapshot for failed Kubernetes pods.
+
+It intelligently aggregates:
+  - Pod status and container states
+  - Critical events (Warning/Error only - filters out noise)
+  - Previous crash logs (if container restarted)
+  - Current container logs
+
+Only failed/restarted containers are shown by default, keeping output focused.`,
+		Example: `  # Triage a crashing pod
+  kubectl triage my-failing-pod
+
+  # Triage a pod in a specific namespace
+  kubectl triage my-pod -n production
+
+  # Show all containers, not just failed ones
+  kubectl triage my-pod --all-containers
+
+  # Inspect a healthy pod anyway
+  kubectl triage my-pod --force
+
+  # Show more log lines
+  kubectl triage my-pod --lines=100`,
 		SilenceErrors: true,
 		SilenceUsage:  true,
+		Args:          cobra.ExactArgs(1), // Require exactly one argument (pod name)
 		PreRun: func(cmd *cobra.Command, args []string) {
 			viper.BindPFlags(cmd.Flags())
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			log := logger.NewLogger()
-			log.Info("")
+			// Get pod name from arguments
+			podName := args[0]
 
-			s := spin.New()
-			finishedCh := make(chan bool, 1)
-			namespaceName := make(chan string, 1)
-			go func() {
-				lastNamespaceName := ""
-				for {
-					select {
-					case <-finishedCh:
-						fmt.Printf("\r")
-						return
-					case n := <-namespaceName:
-						lastNamespaceName = n
-					case <-time.After(time.Millisecond * 100):
-						if lastNamespaceName == "" {
-							fmt.Printf("\r  \033[36mSearching for namespaces\033[m %s", s.Next())
-						} else {
-							fmt.Printf("\r  \033[36mSearching for namespaces\033[m %s (%s)", s.Next(), lastNamespaceName)
-						}
-					}
-				}
-			}()
-			defer func() {
-				finishedCh <- true
-			}()
-
-			if err := plugin.RunPlugin(KubernetesConfigFlags, namespaceName); err != nil {
-				return errors.Unwrap(err)
+			// Get namespace from kubectl flags
+			namespace := ""
+			if KubernetesConfigFlags.Namespace != nil && *KubernetesConfigFlags.Namespace != "" {
+				namespace = *KubernetesConfigFlags.Namespace
 			}
 
-			log.Info("")
+			// Build triage options
+			opts := &plugin.TriageOptions{
+				PodName:       podName,
+				Namespace:     namespace,
+				Lines:         lines,
+				AllContainers: allContainers,
+				Force:         force,
+				NoColor:       noColor,
+			}
+
+			// Run the triage
+			if err := plugin.RunPlugin(KubernetesConfigFlags, opts); err != nil {
+				return errors.Unwrap(err)
+			}
 
 			return nil
 		},
@@ -70,8 +87,15 @@ func RootCmd() *cobra.Command {
 
 	cobra.OnInitialize(initConfig)
 
+	// Add kubectl flags (--namespace, --context, --kubeconfig, etc.)
 	KubernetesConfigFlags = genericclioptions.NewConfigFlags(false)
 	KubernetesConfigFlags.AddFlags(cmd.Flags())
+
+	// Add custom flags
+	cmd.Flags().Int64Var(&lines, "lines", 50, "Number of log lines to display (default: 50)")
+	cmd.Flags().BoolVar(&allContainers, "all-containers", false, "Show all containers, not just failed/restarted ones")
+	cmd.Flags().BoolVar(&force, "force", false, "Inspect pod even if it appears healthy")
+	cmd.Flags().BoolVar(&noColor, "no-color", false, "Disable colored output")
 
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	return cmd
@@ -79,7 +103,7 @@ func RootCmd() *cobra.Command {
 
 func InitAndExecute() {
 	if err := RootCmd().Execute(); err != nil {
-		fmt.Println(err)
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
 }
