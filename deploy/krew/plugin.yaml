@@ -43,11 +43,6 @@ spec:
     bin: "kubectl-triage.exe"
   shortDescription: Fast diagnostics for failed pods
   homepage: https://github.com/Lc-Lin/kubectl-triage
-  caveats: |
-    Usage:
-      kubectl triage <pod-name>
-
-    See kubectl triage --help for more information.
   description: |
     kubectl-triage provides 5-second diagnostic snapshots for failed
     Kubernetes pods.
